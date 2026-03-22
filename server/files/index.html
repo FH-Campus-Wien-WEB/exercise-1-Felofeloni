@@ -9,8 +9,67 @@
         /* Part 3: Your styling goes here */
     </style>
     <script>
-        function reverseString(s) {
-            return s.split("").reverse().join("");
+        function displayMovie(movie) {
+            //Container
+            const container = document.createElement("article");
+
+            //Poster
+            const poster = document.createElement("img");
+            poster.src = movie.Poster;
+            container.appendChild(poster);
+
+            //Title
+            const title = document.createElement("h2");
+            title.textContent = movie.Title;
+            container.appendChild(title);
+
+            // Info (Released, Runtime, Rating)
+            const info = document.createElement("p");
+            info.textContent = `Released: ${movie.Released} | Runtime: ${movie.Runtime} min | IMDb: ${movie.imdbRating} | Metascore: ${movie.Metascore}`;
+            container.appendChild(info);
+
+            // Genres
+            const genres = document.createElement("p");
+            genres.textContent = `Genres: ${movie.Genres.join(", ")}`;
+            container.appendChild(genres);
+
+            // Plot
+            const plot = document.createElement("p");
+            plot.textContent = movie.Plot;
+            container.appendChild(plot);
+
+            //Directors
+            const directors = generateListElement("Directors", movie.Directors);
+            container.appendChild(directors);
+
+            //Writers
+            const writers = generateListElement("Writers", movie.Writers);
+            container.appendChild(writers);
+            
+            //Actors
+            const actors = generateListElement("Actors", movie.Actors);
+            container.appendChild(actors);
+
+            return container
+        }
+
+        function generateListElement(listTitle, list){
+            const element = document.createElement("p")
+
+            const title = document.createElement("h3");
+            title.textContent = listTitle;
+            element.appendChild(title)
+
+            const unsortedList = document.createElement("ul")
+            for(const item of list){
+                const listItem = document.createElement("li");
+                listItem.textContent = item;
+                unsortedList.appendChild(listItem)
+            }
+
+            element.appendChild(unsortedList)
+
+            return element
         }
 
         window.onload = function () {
@@ -18,8 +77,10 @@
             xhr.onload = function () {
                 const bodyElement = document.querySelector("body")
                 if (xhr.status == 200) {
-		            /* Part 2: Build the HTML elements here and append them to the body */ 
-                    bodyElement.append(reverseString(xhr.responseText))
+                    const movies = JSON.parse(xhr.responseText)
+                    for(const movie of movies){
+                        bodyElement.append(displayMovie(movie))
+                    }
                 } else {
                     bodyElement.append("Daten konnten nicht geladen werden, Status " + xhr.status + " - " + xhr.statusText)
                 }
@@ -32,6 +93,7 @@
 </head>
 
 <body>
+    <h1>Our Movie Selection</h1>
 </body>
 
 </html>
