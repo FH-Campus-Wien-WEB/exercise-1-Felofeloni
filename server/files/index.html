@@ -6,49 +6,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies!</title>
     <style>
-        /* Part 3: Your styling goes here */
+        * {
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: rgb(255, 255, 255);
+            margin: 0px;
+        }
+
+        header{
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+        }
+
+        h1{
+            padding-left: 5px;
+        }
+
+        article{
+            display: flex;
+            margin: 10px;
+            background-color: rgb(231, 231, 231);
+            max-height: 24vw;
+        }
+
+        article > div{
+            margin-left: 20px;
+            padding-bottom: 10px;
+            max-width: 100%;
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        article > div *{
+            font-size: 1rem;
+            color: black;
+        }
+
+        article div h2{
+            font-size: 1.5rem;
+        }
+
+        img {
+            max-height: 24vw;
+            width: auto;
+            height: auto;
+            border-right: 5px solid red;
+        }
+
+        .genre-tag{
+            margin-right: 5px;
+            background-color: red;
+            padding: 8px;
+            color: white;
+            border-radius: 100px;
+            font-size: 0.8rem;
+        }
+
+        .article-header{
+            margin: 10px 0;
+        }
+
+        .article-header *{
+            margin: 2px;
+        }
+
     </style>
     <script>
         function displayMovie(movie) {
             //Container
-            const container = document.createElement("article");
+            const container = document.createElement("article")
 
             //Poster
-            const poster = document.createElement("img");
-            poster.src = movie.Poster;
-            container.appendChild(poster);
+            const poster = document.createElement("img")
+            poster.src = movie.Poster
+            container.appendChild(poster)
 
-            //Title
-            const title = document.createElement("h2");
-            title.textContent = movie.Title;
-            container.appendChild(title);
+            //Child-container
+            const childContainer = document.createElement("div")
 
-            // Info (Released, Runtime, Rating)
-            const info = document.createElement("p");
-            info.textContent = `Released: ${movie.Released} | Runtime: ${movie.Runtime} min | IMDb: ${movie.imdbRating} | Metascore: ${movie.Metascore}`;
-            container.appendChild(info);
+                //Title-container
+                const titleContainer = document.createElement("div")
+                titleContainer.classList.add("article-header");
 
-            // Genres
-            const genres = document.createElement("p");
-            genres.textContent = `Genres: ${movie.Genres.join(", ")}`;
-            container.appendChild(genres);
+                    //Title
+                    const title = document.createElement("h2")
+                    title.textContent = movie.Title
+                    titleContainer.appendChild(title)
 
-            // Plot
-            const plot = document.createElement("p");
-            plot.textContent = movie.Plot;
-            container.appendChild(plot);
+                    // Info (Released, Runtime, Rating)
+                    const info = document.createElement("p")
+                    info.textContent = `Released: ${movie.Released} | Runtime: ${movie.Runtime} min | IMDb: ${movie.imdbRating} | Metascore: ${movie.Metascore}`
+                    titleContainer.appendChild(info)
 
-            //Directors
-            const directors = generateListElement("Directors", movie.Directors);
-            container.appendChild(directors);
+                childContainer.appendChild(titleContainer)
 
-            //Writers
-            const writers = generateListElement("Writers", movie.Writers);
-            container.appendChild(writers);
-            
-            //Actors
-            const actors = generateListElement("Actors", movie.Actors);
-            container.appendChild(actors);
+                // Genres
+                const genres = generateTagsElement(movie.Genres)
+                childContainer.appendChild(genres)
+
+                // Plot
+                const plot = document.createElement("p")
+                plot.textContent = movie.Plot
+                childContainer.appendChild(plot)
+
+                //Directors
+                const directors = generateListElement("Directors", movie.Directors)
+                childContainer.appendChild(directors)
+
+                //Writers
+                const writers = generateListElement("Writers", movie.Writers)
+                childContainer.appendChild(writers)
+                
+                //Actors
+                const actors = generateListElement("Actors", movie.Actors)
+                childContainer.appendChild(actors)
+
+            container.appendChild(childContainer)
 
             return container
         }
@@ -62,12 +138,25 @@
 
             const unsortedList = document.createElement("ul")
             for(const item of list){
-                const listItem = document.createElement("li");
-                listItem.textContent = item;
+                const listItem = document.createElement("li")
+                listItem.textContent = item
                 unsortedList.appendChild(listItem)
             }
 
             element.appendChild(unsortedList)
+
+            return element
+        }
+
+        function generateTagsElement(list){
+            const element = document.createElement("div")
+
+            for(const item of list){
+                const span = document.createElement("span")
+                span.textContent = item
+                span.classList.add("genre-tag");
+                element.appendChild(span)
+            }
 
             return element
         }
@@ -93,7 +182,9 @@
 </head>
 
 <body>
-    <h1>Our Movie Selection</h1>
+    <header>
+        <h1>Our Movie Selection</h1>
+    </header>
 </body>
 
 </html>
